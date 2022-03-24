@@ -1,4 +1,4 @@
-package vip.zhguo.chartRoom;
+package vip.zhguo.chartRoom.common;
 
 import java.io.Serializable;
 

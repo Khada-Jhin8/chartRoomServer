@@ -1,4 +1,4 @@
-package vip.zhguo.chartRoom;
+package vip.zhguo.chartRoom.common;
 
 public interface MessageType {
     String MESSAGE_LOGIN_SUCCESSD = "1";//登陆成功
