@@ -15,6 +15,10 @@ public class ManageClientThread {
         return map.get(key);
     }
 
+    public static void removeServerConnectClientThread(String key) {
+        ServerConnectClientThread remove = map.remove(key);
+    }
+
     public static String getMembers() {
         Set<String> keySet = map.keySet();
         String members = "";

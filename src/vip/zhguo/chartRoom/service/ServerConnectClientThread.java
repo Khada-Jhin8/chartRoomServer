@@ -42,6 +42,10 @@ public class ServerConnectClientThread extends Thread {
                     //回包
                     ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                     oos.writeObject(return_message);
+                } else if (message.getMessagerType().equals(MessageType.MESSAGE_CLIENT_EXIT)) {
+                    System.out.println(message.getSender() + "断开了与系统的连接");
+                    ManageClientThread.removeServerConnectClientThread(uId);
+                    break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
