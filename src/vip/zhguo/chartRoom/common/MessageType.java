@@ -6,4 +6,5 @@ public interface MessageType {
     String MESSAGE_GET_ONLINE_FRIENDS = "3";//获取在线用户列表
     String MESSAGE_RETURN_ONLINE_FRIENDS = "4";//返回在线用户列表
     String MESSAGE_CLIENT_EXIT = "5";//客户端推出
+    String MESSAGE_COMMON_MSG = "6"; // 普通消息类型，即聊天包
 }
