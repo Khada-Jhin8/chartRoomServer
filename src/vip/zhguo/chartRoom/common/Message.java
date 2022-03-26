@@ -1,5 +1,6 @@
 package vip.zhguo.chartRoom.common;
 
+import java.io.File;
 import java.io.Serializable;
 
 public class Message implements Serializable {
@@ -9,7 +10,23 @@ public class Message implements Serializable {
     private String content;
     private String messagerType;
     private String sendTime;
+    private byte[] filedata;
+    private File file;
 
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+    public byte[] getFiledata() {
+        return filedata;
+    }
+
+    public void setFiledata(byte[] filedata) {
+        this.filedata = filedata;
+    }
     public String getSender() {
         return sender;
     }

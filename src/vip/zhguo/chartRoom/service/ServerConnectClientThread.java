@@ -47,24 +47,43 @@ public class ServerConnectClientThread extends Thread {
                     oos.writeObject(return_message);
 
 
+                } else if (message.getMessagerType().equals(MessageType.MESSAGE_TO_ALL_MSG)) {
+                    String onlineMembers = ManageClientThread.getMembers();
+                    ObjectOutputStream oos = null;
+                    String[] member = onlineMembers.split(",");
+                    for (String m : member
+                    ) {
+                        oos = new ObjectOutputStream(ManageClientThread.getServerConnectClientThread(m.trim())
+                                .getSocket()
+                                .getOutputStream());
+                        oos.writeObject(message);
+                    }
                 } else if (message.getMessagerType().equals(MessageType.MESSAGE_COMMON_MSG)) {
                     System.out.println();
                     System.out.println(message.getSendTime() + ":将<" + message.getSender() + "> 的消息转发给 <" + message.getGetter() + "> 内容为\"" + message.getContent() + "\"");
 
                     // 判断接收者是否在线，如果不在线给通知发送者。
-                    if (ManageClientThread.getServerConnectClientThread(message.getGetter()) == null){
-                        ObjectOutputStream oos1 = new ObjectOutputStream(ManageClientThread.getServerConnectClientThread(message.getSender()).getSocket().getOutputStream());
+                    if (ManageClientThread.getServerConnectClientThread(message.getGetter()) == null) {
+                        ObjectOutputStream oos1 = new ObjectOutputStream(ManageClientThread.getServerConnectClientThread(message.getSender())
+                                .getSocket()
+                                .getOutputStream());
                         Message message1 = new Message();
                         message1.setMessagerType(MessageType.MESSAGE_COMMON_MSG);
                         message1.setContent("您发送的对象不在线，发送失败。");
                         oos1.writeObject(message1);
-                    }else{
-                        ObjectOutputStream oos = new ObjectOutputStream(ManageClientThread.getServerConnectClientThread(message.getGetter()).getSocket().getOutputStream());
+                    } else {
+                        ObjectOutputStream oos = new ObjectOutputStream(ManageClientThread.getServerConnectClientThread(message.getGetter())
+                                .getSocket()
+                                .getOutputStream());
                         oos.writeObject(message);
                     }
-
-
-
+                } else if (message.getMessagerType().equals(MessageType.MESSAGE_FILE_MSG)) {
+                    System.out.println("传文件了");
+                    String getter = message.getGetter();
+                    ObjectOutputStream oos = new ObjectOutputStream(ManageClientThread.getServerConnectClientThread(getter)
+                            .getSocket()
+                            .getOutputStream());
+                    oos.writeObject(message);
                 } else if (message.getMessagerType().equals(MessageType.MESSAGE_CLIENT_EXIT)) {
                     System.out.println(message.getSender() + "断开了与系统的连接");
                     ManageClientThread.removeServerConnectClientThread(uId);
