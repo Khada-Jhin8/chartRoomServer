@@ -9,4 +9,5 @@ public interface MessageType {
     String MESSAGE_COMMON_MSG = "6"; // 普通消息类型，即聊天包
     String MESSAGE_TO_ALL_MSG = "7";// 群发消息
     String MESSAGE_FILE_MSG = "8"; //发送文件
+    String MESSAGE_GET_OFFLINE_MSG = "9";//获取离线消息
 }

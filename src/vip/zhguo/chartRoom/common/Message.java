@@ -2,6 +2,7 @@ package vip.zhguo.chartRoom.common;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.List;
 
 public class Message implements Serializable {
     private static final long serialVersionUID= 1L;
@@ -12,7 +13,14 @@ public class Message implements Serializable {
     private String sendTime;
     private byte[] filedata;
     private File file;
+    private List offLineMsgs;
+    public List getOffLineMsgs() {
+        return offLineMsgs;
+    }
 
+    public void setOffLineMsgs(List offLineMsgs) {
+        this.offLineMsgs = offLineMsgs;
+    }
     public File getFile() {
         return file;
     }

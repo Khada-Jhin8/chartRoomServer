@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 /**
  * 与客户端保持连接线程
@@ -64,13 +65,15 @@ public class ServerConnectClientThread extends Thread {
 
                     // 判断接收者是否在线，如果不在线给通知发送者。
                     if (ManageClientThread.getServerConnectClientThread(message.getGetter()) == null) {
-                        ObjectOutputStream oos1 = new ObjectOutputStream(ManageClientThread.getServerConnectClientThread(message.getSender())
-                                .getSocket()
-                                .getOutputStream());
-                        Message message1 = new Message();
-                        message1.setMessagerType(MessageType.MESSAGE_COMMON_MSG);
-                        message1.setContent("您发送的对象不在线，发送失败。");
-                        oos1.writeObject(message1);
+//                        ObjectOutputStream oos1 = new ObjectOutputStream(ManageClientThread.getServerConnectClientThread(message.getSender())
+//                                .getSocket()
+//                                .getOutputStream());
+//                        Message message1 = new Message();
+//                        message1.setMessagerType(MessageType.MESSAGE_COMMON_MSG);
+//                        message1.setContent("您发送的对象不在线，发送失败。");
+//                        oos1.writeObject(message1);
+//                         优化上面代码，将不在线的用户消息缓存到的服务器，等待上线后发送。
+                        ManageOffLineMessage.addOfflienMessage(message.getGetter(),message);
                     } else {
                         ObjectOutputStream oos = new ObjectOutputStream(ManageClientThread.getServerConnectClientThread(message.getGetter())
                                 .getSocket()
@@ -84,6 +87,18 @@ public class ServerConnectClientThread extends Thread {
                             .getSocket()
                             .getOutputStream());
                     oos.writeObject(message);
+                }else if (message.getMessagerType().equals(MessageType.MESSAGE_GET_OFFLINE_MSG)){
+                    List<Message> offLineMessage = ManageOffLineMessage.getOffLineMessage(message.getSender());
+                    if (offLineMessage == null)
+                        continue;
+                    ObjectOutputStream oos = new ObjectOutputStream(ManageClientThread.getServerConnectClientThread(message.getSender())
+                            .getSocket()
+                            .getOutputStream());
+                    Message message1 = new Message();
+                    message1.setMessagerType(MessageType.MESSAGE_GET_OFFLINE_MSG);
+                    message1.setOffLineMsgs(offLineMessage);
+                    oos.writeObject(message1);
+
                 } else if (message.getMessagerType().equals(MessageType.MESSAGE_CLIENT_EXIT)) {
                     System.out.println(message.getSender() + "断开了与系统的连接");
                     ManageClientThread.removeServerConnectClientThread(uId);
